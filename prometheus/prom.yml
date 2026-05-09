@@ -11,7 +11,7 @@ scrape_configs:
   #   static_configs:
   #     - targets: ['example_api:9091']
 
-  #  ? TODO: add your services here
+  # ? TODO: add your services here
   # - job_name: 'your-job-name'
   #   scheme: https
   #   static_configs:
@@ -19,3 +19,16 @@ scrape_configs:
   #   basic_auth:
   #     username: HTTP_AUTH_USERNAME_GOES_HERE
   #     password: HTTP_AUTH_PASSWORD_GOES_HERE
+
+  # Flowise metrics — deployed via dedicated Prometheus-Flowise service
+  - job_name: 'flowise'
+    scrape_interval: 15s
+    metrics_path: '/api/v1/metrics'
+    scheme: https
+    authorization:
+      type: Bearer
+      credentials_file: '/run/secrets/flowise_api_key'
+    static_configs:
+      - targets: ['flow-stable-flow.up.railway.app']
+    tls_config:
+      insecure_skip_verify: false
